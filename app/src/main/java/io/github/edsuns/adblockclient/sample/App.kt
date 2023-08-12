@@ -1,11 +1,14 @@
 package io.github.edsuns.adblockclient.sample
 
+import android.Manifest
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import io.github.edsuns.adblockclient.sample.main.MainActivity
@@ -22,10 +25,8 @@ class App : Application() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
-
         val filter = AdFilter.create(this)
         val viewModel = filter.viewModel
-
         viewModel.workToFilterMap.observeForever { notifyDownloading(it.isEmpty()) }
     }
 
@@ -42,7 +43,7 @@ class App : Application() {
         val intent = Intent(this, clazz).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        val pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
         val builder = NotificationCompat.Builder(this, channelId).apply {
             setContentTitle(getString(R.string.filter_download))
@@ -86,6 +87,13 @@ class App : Application() {
             }
             val notification = builder.build()
             cancel(notificationId)// fix notification remains on MIUI 12.5
+            if (ActivityCompat.checkSelfPermission(
+                    this@App,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                return
+            }
             notify(notificationId, notification)
         }
     }

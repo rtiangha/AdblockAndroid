@@ -15,6 +15,7 @@ import io.github.edsuns.adfilter.impl.Constants.TAG_INSTALLATION
 import io.github.edsuns.adfilter.util.None
 import io.github.edsuns.adfilter.workers.DownloadWorker
 import io.github.edsuns.adfilter.workers.InstallationWorker
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -53,6 +54,7 @@ internal class FilterViewModelImpl constructor(
     /**
      * [Filter.id] to [Filter]
      */
+    @OptIn(ExperimentalSerializationApi::class)
     private val filterMap: MutableLiveData<LinkedHashMap<String, Filter>> by lazy {
         MutableLiveData(Json.decodeFromString(sharedPreferences.filterMap))
     }
@@ -229,6 +231,7 @@ internal class FilterViewModelImpl constructor(
         saveFilterMap()
     }
 
+    @OptIn(ExperimentalSerializationApi::class)
     private fun saveFilterMap() {
         sharedPreferences.filterMap = Json.encodeToString(filterMap.value)
         Timber.v("Save sharedPreferences.filterMap")
