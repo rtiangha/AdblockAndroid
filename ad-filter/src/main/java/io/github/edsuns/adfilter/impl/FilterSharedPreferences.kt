@@ -3,6 +3,7 @@ package io.github.edsuns.adfilter.impl
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -23,6 +24,7 @@ internal class FilterSharedPreferences(private val context: Context) {
         get() = preferences.getString(KEY_FILTER_MAP, "{}")!!
         set(value) = preferences.edit { putString(KEY_FILTER_MAP, value) }
 
+    @OptIn(ExperimentalSerializationApi::class)
     var downloadFilterIdMap: HashMap<String, String>
         get() = Json.decodeFromString(preferences.getString(KEY_DOWNLOAD_FILTER_ID_MAP, "{}")!!)
         set(value) = preferences.edit {

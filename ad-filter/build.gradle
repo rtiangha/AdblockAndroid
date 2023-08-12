@@ -83,3 +83,6 @@ kapt {
         arg("mezzanine.projectPath", projectDir)
     }
 }
+
+
+apply from: rootProject.file("gradle/maven-publish.gradle")
