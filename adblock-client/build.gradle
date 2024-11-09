@@ -2,14 +2,13 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 33
+    compileSdk rootProject.ext.compile_sdk_version
     // buildToolsVersion "29.0.3"
     namespace = "io.github.edsuns.adfilter"
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 33
-        versionCode 1
+        targetSdk rootProject.ext.target_sdk_version
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -30,8 +29,11 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
@@ -42,7 +44,7 @@ ext {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation "androidx.core:core-ktx:$kotlin_core_version"
     implementation "com.jakewharton.timber:timber:$timber"
 
     // implementation 'androidx.appcompat:appcompat:1.6.1'
