@@ -15,11 +15,17 @@ import io.github.edsuns.adfilter.impl.Constants.TAG_INSTALLATION
 import io.github.edsuns.adfilter.util.None
 import io.github.edsuns.adfilter.workers.DownloadWorker
 import io.github.edsuns.adfilter.workers.InstallationWorker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import timber.log.Timber
+import androidx.work.await
 
 /**
  * Created by Edsuns@qq.com on 2021/7/29.
@@ -83,7 +89,7 @@ internal class FilterViewModelImpl constructor(
      */
     override val onDirty: LiveData<None> = MutableLiveData()
 
-    init {
+    /*init {
         workManager.pruneWork()
         // clear bad running download state
         filters.value?.values?.forEach {
@@ -102,7 +108,40 @@ internal class FilterViewModelImpl constructor(
                 }
             }
         }
+    }*/
+    private val customScope = CoroutineScope(Dispatchers.Main + Job())
+
+    //Fixed BY Deepseek
+    init {
+        workManager.pruneWork()
+        filters.value?.values?.forEach { filter ->
+            if (filter.downloadState.isRunning) {
+                customScope.launch { // Or use a custom CoroutineScope
+                    try {
+                        val list = withContext(Dispatchers.IO) {
+                            workManager.getWorkInfosForUniqueWork(filter.id).get()
+                        }
+                        if (list == null || list.isEmpty()) {
+                            filter.downloadState = DownloadState.FAILED
+                            flushFilter()
+                        } else {
+                            if (list[0].state == WorkInfo.State.ENQUEUED
+                                && filter.downloadState != DownloadState.ENQUEUED
+                            ) {
+                                filter.downloadState = DownloadState.ENQUEUED
+                                flushFilter()
+                            }
+                        }
+                    } catch (e: Exception) {
+                        // Handle exceptions
+                        filter.downloadState = DownloadState.FAILED
+                        flushFilter()
+                    }
+                }
+            }
+        }
     }
+
 
     override fun addFilter(name: String, url: String): Filter {
         val filter = Filter(url)

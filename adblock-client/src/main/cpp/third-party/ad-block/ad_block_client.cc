@@ -1508,7 +1508,7 @@ bool AdBlockClient::parse(const char *input, bool preserveRules) {
   const char *p = lineStart + 1;
 
   while (true) {
-    if ((isEndOfLine(*p) || *p == '\0') && p > lineStart) {
+    if (!p && !lineStart && (isEndOfLine(*p) || *p == '\0') && p > lineStart) {
       Filter f;
       parseFilter(lineStart, p, &f, bloomFilter, exceptionBloomFilter,
                   hostAnchoredHashSet,
