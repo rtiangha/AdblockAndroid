@@ -32,7 +32,7 @@ allprojects {
         maven { url "https://jitpack.io" }
     }
     version = "1.0.0"
-    group = 'com.github.Edsuns.AdblockAndroid'
+    group = 'com.github.rtiangha.AdblockAndroid'
 }
 
 tasks.register('clean', Delete) {
