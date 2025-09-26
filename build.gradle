@@ -36,7 +36,7 @@ allprojects {
         maven { url 'https://maven.google.com/' }
         maven { url "https://jitpack.io" }
     }
-    version = "1.0.1"
+    version = "1.0.2"
     group = 'com.github.Edsuns.AdblockAndroid'
 }
 
