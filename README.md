@@ -46,7 +46,7 @@ Add it in your root build.gradle at the end of repositories:
 allprojects {
     repositories {
         ...
-        maven { url 'https://jitpack.io' }
+        maven { url = uri("https://jitpack.io")}
     }
 }
 ```
@@ -55,7 +55,7 @@ Add the dependency:
 
 ```groovy
 dependencies {
-    implementation 'com.github.Edsuns.AdblockAndroid:ad-filter:1.0'
+    implementation("com.github.matan-h:AdblockAndroid:04be762e4f")
 }
 ```
 
