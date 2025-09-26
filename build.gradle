@@ -26,7 +26,7 @@ buildscript {
 plugins {
     id 'com.android.application' version '7.4.2' apply false
     id 'com.android.library' version '7.4.2' apply false
-    id 'org.jetbrains.kotlin.android' version '1.8.20' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.24' apply false
 }
 
 allprojects {
@@ -39,6 +39,25 @@ allprojects {
     version = "1.0.1"
     group = 'com.github.Edsuns.AdblockAndroid'
 }
+
+allprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_17.toString()
+        }
+    }
+}
+
+subprojects {
+    plugins.withId("org.jetbrains.kotlin.jvm") {
+        java {
+            toolchain {
+                languageVersion = JavaLanguageVersion.of(17)
+            }
+        }
+    }
+}
+
 
 tasks.register('clean', Delete) {
     delete rootProject.buildDir
