@@ -45,6 +45,8 @@ ext {
     coroutines = '1.7.3'
     ankoVersion = "0.10.4"
     mezzanineVersion = '1.2.1'
+    work_manager_version = "2.10.0"
+
 }
 
 dependencies {
