@@ -2,12 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 36
+    namespace = "io.github.edsuns.adblockandroid"
 
     defaultConfig {
         applicationId "io.github.edsuns.adblockclient.sample"
         minSdkVersion 23
-        targetSdkVersion 33
+        targetSdkVersion 36
         versionCode 1
         versionName "1.0"
 

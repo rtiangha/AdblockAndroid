@@ -4,13 +4,13 @@ apply plugin: 'kotlinx-serialization'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 36
     // buildToolsVersion "29.0.3"
     namespace = "io.github.edsuns.adfilter"
 
     defaultConfig {
         minSdkVersion 23
-        targetSdkVersion 33
+        targetSdkVersion 36
         versionCode 1
         versionName "1.0"
 
@@ -61,7 +61,7 @@ dependencies {
 
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines"
 
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0"
 
     implementation "androidx.work:work-runtime-ktx:$work_manager_version"
 
@@ -70,10 +70,10 @@ dependencies {
     implementation "com.github.Edsuns.Mezzanine:mezzanine:$mezzanineVersion"
     kapt "com.github.Edsuns.Mezzanine:mezzanine-compiler:$mezzanineVersion"
 
-    // implementation 'androidx.appcompat:appcompat:1.6.1'
-    // testImplementation 'junit:junit:4.13.1'
-    // androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    // androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    // implementation 'androidx.appcompat:appcompat:1.7.1'
+    // testImplementation 'junit:junit:4.13.2'
+    // androidTestImplementation 'androidx.test.ext:junit:1.3.0'
+    // androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
 
     // Anko
     // implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
@@ -82,7 +82,7 @@ dependencies {
 
 kapt {
     arguments {
-        arg("mezzanine.projectPath", projectDir)
+        arg("mezzanine.projectPath", projectDir.absolutePath)
     }
 }
 
