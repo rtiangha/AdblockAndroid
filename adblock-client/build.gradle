@@ -6,6 +6,10 @@ android {
     // buildToolsVersion "29.0.3"
     namespace = "io.github.edsuns.adblockclient"
 
+    publishing {
+        singleVariant("release") {}
+    }
+
     defaultConfig {
         minSdkVersion 23
         targetSdk rootProject.ext.target_sdk_version
