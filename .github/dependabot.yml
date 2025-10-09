@@ -1,0 +1,37 @@
+version: 2
+updates:
+  # Root Gradle build files (build.gradle, settings.gradle, gradle.properties)
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+
+  # Android app module
+  - package-ecosystem: "gradle"
+    directory: "/app"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+
+  # adblock-client module
+  - package-ecosystem: "gradle"
+    directory: "/adblock-client"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+
+  # ad-filter module
+  - package-ecosystem: "gradle"
+    directory: "/ad-filter"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
