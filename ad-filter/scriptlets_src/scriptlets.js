@@ -306,7 +306,18 @@
     var endsWith = function endsWith(str, ending) {
       // if str === '', (str && false) will return ''
       // that's why it has to be !!str
-      return !!str && str.indexOf(ending) === str.length - ending.length;
+      if (!str) {
+        return false;
+      }
+      if (typeof str.endsWith === "function") {
+        return str.endsWith(ending);
+      }
+      // Safe manual implementation in case .endsWith is not available
+      return (
+        typeof ending === "string" &&
+        ending.length <= str.length &&
+        str.lastIndexOf(ending) === str.length - ending.length
+      );
     };
     var substringAfter = function substringAfter(str, separator) {
       if (!str) {
