@@ -12,8 +12,15 @@ android {
 
     defaultConfig {
         minSdkVersion 23
-        targetSdk rootProject.ext.target_sdk_version
-        versionName "1.0"
+        targetSdkVersion 36
+
+        externalNativeBuild {
+            cmake {
+                // Incorrect: Missing the '-D' prefix
+                arguments '-DANDROID_STL=c++_shared'
+                cppFlags "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
+            }
+        }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -29,6 +36,7 @@ android {
     externalNativeBuild {
         cmake {
             path "CMakeLists.txt"
+            version "4.1.2"
         }
     }
 

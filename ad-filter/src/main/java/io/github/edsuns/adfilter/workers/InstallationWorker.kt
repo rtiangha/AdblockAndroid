@@ -32,6 +32,16 @@ internal class InstallationWorker(context: Context, params: WorkerParameters) : 
         val rawChecksum = inputData.getString(KEY_RAW_CHECKSUM) ?: return Result.failure()
         val checkLicense = inputData.getBoolean(KEY_CHECK_LICENSE, false)
         val rawData = binaryDataStore.loadData(downloadedDataName)
+
+        // --- FIX: PREVENT CRASH ---
+        // If the file was empty or download failed silently, rawData might be empty.
+        // Passing empty bytes to AdBlockClient causes the SIGSEGV.
+        if (rawData.isEmpty()) {
+            Timber.e("Fatal: Downloaded filter data is empty for ID: $id")
+            return Result.failure()
+        }
+        // --------------------------
+
         val dataStr = String(rawData)
         val name = extractTitle(dataStr)
         val checksum = Checksum(dataStr)
@@ -53,15 +63,22 @@ internal class InstallationWorker(context: Context, params: WorkerParameters) : 
                 )
             )
         }
-        val filtersCount = persistFilterData(id, rawData)
-        binaryDataStore.clearData(downloadedDataName)
-        return Result.success(
-            workDataOf(
-                KEY_FILTERS_COUNT to filtersCount,
-                KEY_FILTER_NAME to name,
-                KEY_RAW_CHECKSUM to checksum.checksumCalc
+
+        try {
+            val filtersCount = persistFilterData(id, rawData)
+            binaryDataStore.clearData(downloadedDataName)
+
+            return Result.success(
+                workDataOf(
+                    KEY_FILTERS_COUNT to filtersCount,
+                    KEY_FILTER_NAME to name,
+                    KEY_RAW_CHECKSUM to checksum.checksumCalc
+                )
             )
-        )
+        } catch (e: Exception) {
+            Timber.e(e, "Failed to persist filter data for ID: $id")
+            return Result.failure()
+        }
     }
 
     private val licenseRegexp = Regex(
@@ -83,6 +100,13 @@ internal class InstallationWorker(context: Context, params: WorkerParameters) : 
     private fun extractTitle(data: String): String? = titleRegexp.find(data)?.groupValues?.get(1)
 
     private fun persistFilterData(id: String, rawBytes: ByteArray): Int {
+
+        // --- FIX: EXTRA SAFETY ---
+        if (rawBytes.isEmpty()) {
+            Timber.w("Skipping persistFilterData: rawBytes is empty.")
+            return 0
+        }
+
         val client = AdBlockClient(id)
         client.loadBasicData(rawBytes, true)
         binaryDataStore.saveData(id, client.getProcessedData())
