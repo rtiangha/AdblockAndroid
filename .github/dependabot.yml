@@ -1,4 +1,4 @@
-version: 2
+version: 2 
 updates:
   # Root Gradle build files (build.gradle, settings.gradle, gradle.properties)
   - package-ecosystem: "gradle"
@@ -35,3 +35,11 @@ updates:
     open-pull-requests-limit: 5
     labels:
       - "dependencies"
+
+  # GitHub Actions workflows - keeps actions used in .github/workflows up to date
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
