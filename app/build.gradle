@@ -80,8 +80,8 @@ dependencies {
 
     constraints {
         implementation 'com.google.guava:guava:33.5.0-jre'
-        implementation 'com.google.protobuf:protobuf-java:4.33.2'
-        implementation 'com.google.protobuf:protobuf-kotlin:4.33.2'
+        implementation 'com.google.protobuf:protobuf-java:4.33.4'
+        implementation 'com.google.protobuf:protobuf-kotlin:4.33.4'
         implementation 'io.netty:netty-common:4.2.9.Final'
         implementation 'io.netty:netty-codec-http:4.2.9.Final'
         implementation 'io.netty:netty-codec-http2:4.2.9.Final'
@@ -97,7 +97,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.17.0'
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:6.0.2'
     androidTestImplementation 'androidx.test.ext:junit:1.3.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.7.0'
 
