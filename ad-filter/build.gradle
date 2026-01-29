@@ -49,7 +49,7 @@ ext {
     coroutines = '1.10.2'
     ankoVersion = "0.10.8"
     mezzanineVersion = '1.2.1'
-    work_manager_version = "2.11.0"
+    work_manager_version = "2.11.1"
 
 }
 
