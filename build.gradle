@@ -13,7 +13,7 @@ buildscript {
         maven { url "https://jitpack.io" }
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:8.13.2"
+        classpath "com.android.tools.build:gradle:9.0.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
 
@@ -24,8 +24,8 @@ buildscript {
 }
 
 plugins {
-    id 'com.android.application' version '8.13.2' apply false
-    id 'com.android.library' version '8.13.2' apply false
+    id 'com.android.application' version '9.0.0' apply false
+    id 'com.android.library' version '9.0.0' apply false
     id 'org.jetbrains.kotlin.android' version '2.3.0' apply false
 }
 
@@ -43,7 +43,7 @@ allprojects {
 allprojects {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
         kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_17.toString()
+            jvmTarget = JavaVersion.VERSION_21.toString()
         }
     }
 }
@@ -52,7 +52,7 @@ subprojects {
     plugins.withId("org.jetbrains.kotlin.jvm") {
         java {
             toolchain {
-                languageVersion = JavaLanguageVersion.of(17)
+                languageVersion = JavaLanguageVersion.of(21)
             }
         }
     }
