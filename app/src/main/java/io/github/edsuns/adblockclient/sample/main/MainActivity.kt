@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity(), WebViewClientListener {
             this,
             binding.menuButton,
             Gravity.NO_GRAVITY,
-            R.attr.actionOverflowMenuStyle,
+            android.R.attr.actionOverflowMenuStyle,
             0
         )
         popupMenu.inflate(R.menu.menu_main)

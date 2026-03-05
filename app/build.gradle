@@ -1,8 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 36
+    compileSdk 36
     namespace = "io.github.edsuns.adblockclient.sample"
 
     defaultConfig {
@@ -23,19 +22,6 @@ android {
     }
 
     splits {
-
-        // Configures multiple APKs based on screen density.
-        density {
-
-            // Configures multiple APKs based on screen density.
-            enable false
-
-            // Specifies a list of screen densities Gradle should not create multiple APKs for.
-            exclude "ldpi", "xxhdpi", "xxxhdpi"
-
-            // Specifies a list of compatible screen size settings for the manifest.
-            compatibleScreens 'small', 'normal', 'large', 'xlarge'
-        }
 
         // Configures multiple APKs based on ABI.
         abi {
@@ -60,10 +46,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
     }
 
     buildFeatures {

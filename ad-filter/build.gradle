@@ -1,10 +1,9 @@
 apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
 apply plugin: 'kotlinx-serialization'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'com.android.legacy-kapt'
 
 android {
-    compileSdkVersion 36
+    compileSdk 36
     // buildToolsVersion "29.0.3"
     namespace = "io.github.edsuns.adfilter"
 
@@ -32,10 +31,6 @@ android {
     packagingOptions {
         pickFirst 'META-INF/AL2.0'
         pickFirst 'META-INF/LGPL2.1'
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     compileOptions {
