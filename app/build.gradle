@@ -92,7 +92,7 @@ dependencies {
 
     implementation "com.jakewharton.timber:timber:$timber"
 
-    implementation 'com.google.android.material:material:1.13.0'
+    implementation 'com.google.android.material:material:1.14.0'
 
     implementation 'com.github.Edsuns:SmoothProgressAnimator:1.0'
 }
