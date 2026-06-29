@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdk 36
+    compileSdk 37
     namespace = "io.github.edsuns.adblockclient.sample"
 
     defaultConfig {
         applicationId "io.github.edsuns.adblockclient.sample"
         minSdkVersion 23
-        targetSdkVersion 36
+        targetSdkVersion 37
         versionCode 1
         versionName "1.0"
 
