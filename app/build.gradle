@@ -61,7 +61,7 @@ ext {
 dependencies {
 
     constraints {
-        implementation 'com.google.guava:guava:33.7.1-jre'
+        implementation 'com.google.guava:guava:33.7.2-jre'
         implementation 'com.google.protobuf:protobuf-java:4.36.2'
         implementation 'com.google.protobuf:protobuf-kotlin:4.36.2'
         implementation 'io.netty:netty-common:4.2.18.Final'
