@@ -28,7 +28,7 @@ internal class DownloadWorker(context: Context, params: WorkerParameters) : Work
         val url = inputData.getString(KEY_DOWNLOAD_URL) ?: return Result.failure()
         Timber.v("Start download: $url $id")
         try {
-            val request = HttpRequest(url).timeout(10000).get()
+            val request = HttpRequest(url).timeout(TIMEOUT_MS).get()
             if (request.isBadStatus) {
                 Timber.v("Failed to download (${request.status}): $url $id")
                 return Result.failure(inputData)
@@ -45,8 +45,17 @@ internal class DownloadWorker(context: Context, params: WorkerParameters) : Work
                 )
             )
         } catch (e: IOException) {
-            Timber.v(e, "Failed to download: $url $id")
+            Timber.v(e, "Failed to download: $url $id (attempt ${runAttemptCount + 1})")
+            // Timeouts and connection errors are usually temporary (e.g. a slow list server): try again with backoff
+            if (runAttemptCount + 1 < MAX_ATTEMPTS) {
+                return Result.retry()
+            }
         }
         return Result.failure(inputData)
+    }
+
+    private companion object {
+        const val TIMEOUT_MS = 20000
+        const val MAX_ATTEMPTS = 3
     }
 }

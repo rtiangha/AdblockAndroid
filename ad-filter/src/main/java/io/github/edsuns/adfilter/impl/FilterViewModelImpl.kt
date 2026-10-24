@@ -215,8 +215,24 @@ internal class FilterViewModelImpl constructor(
     }
 
     override fun download(id: String) {
-        if (downloadFilterIdMap.any { it.value == id }) {
-            return
+        // A record in downloadFilterIdMap normally means a download of this filter is in progress. But a record is
+        // only removed when this process sees the work finish, so one can be left behind (process killed, finished
+        // work already pruned, work finished in another process). Check with WorkManager and drop stale records
+        // instead of silently refusing to ever download this filter again.
+        val recordedWorkIds = downloadFilterIdMap.filterValues { it == id }.keys.toList()
+        if (recordedWorkIds.isNotEmpty()) {
+            val stillActive = try {
+                workManager.getWorkInfosForUniqueWork(id).get().any { !it.state.isFinished }
+            } catch (e: Exception) {
+                true // can't tell: keep the old behaviour
+            }
+            if (stillActive) {
+                return
+            }
+            Timber.v("Dropping stale download records for filter $id: $recordedWorkIds")
+            recordedWorkIds.forEach { downloadFilterIdMap.remove(it) }
+            sharedPreferences.downloadFilterIdMap = downloadFilterIdMap
+            (workToFilterMap as MutableLiveData).postValue(downloadFilterIdMap)
         }
         filterMap.value?.get(id)?.let {
             val constraints = Constraints.Builder()
