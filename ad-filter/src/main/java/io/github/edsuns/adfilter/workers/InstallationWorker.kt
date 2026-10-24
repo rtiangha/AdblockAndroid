@@ -45,10 +45,12 @@ internal class InstallationWorker(context: Context, params: WorkerParameters) : 
         val dataStr = String(rawData)
         val name = extractTitle(dataStr)
         val checksum = Checksum(dataStr)
-        // reject filter that doesn't include both checksum and license if checkLicense is true
-        if (checksum.checksumIn == null && checkLicense && !validateLicense(dataStr)) {
-            Timber.v("Filter is invalid: $id")
-            return Result.success()
+        // Reject text that is obviously not a filter list (HTML error pages, captive portals, ...). Lists are not
+        // required to carry any particular header: many have no checksum and no license line.
+        // Fail instead of "succeeding" with no data, which used to reset the list's rule count to 0.
+        if (checksum.checksumIn == null && checkLicense && !looksLikeFilterList(dataStr)) {
+            Timber.w("Not a filter list (HTML page or no list header/metadata): $id")
+            return Result.failure()
         }
         Timber.v("Checksum: $rawChecksum, ${checksum.checksumIn}, ${checksum.checksumCalc}, ${checksum.validate()}")
         if (!checksum.validate()) {
@@ -81,16 +83,28 @@ internal class InstallationWorker(context: Context, params: WorkerParameters) : 
         }
     }
 
-    private val licenseRegexp = Regex(
-        "^\\s*!\\s*licen[sc]e[\\s\\-:]+([\\S ]+)$",
+    // "[Adblock Plus 2.0]", "[uBlock Origin]", ...
+    private val listHeaderRegexp = Regex(
+        "^\\s*\\[(?:Adblock Plus|uBlock Origin|Adblock|AdGuard)[^\\]\\r\\n]*\\]",
+        RegexOption.IGNORE_CASE
+    )
+
+    // "! Title: ...", "! Version: ...", "! Licence: ..." and similar header comments
+    private val metadataRegexp = Regex(
+        "^\\s*!\\s*(?:title|version|homepage|expires|description|last modified|licen[sc]e)\\b",
         setOf(RegexOption.IGNORE_CASE, RegexOption.MULTILINE)
     )
 
     /**
-     * Check if the filter includes a license.
-     * Returning false often means that the filter is invalid.
+     * Cheap sanity check that the downloaded text is a filter list: not an HTML/XML page, and it has either a list
+     * header line or at least one of the usual metadata comments near the top.
      */
-    private fun validateLicense(data: String): Boolean = licenseRegexp.containsMatchIn(data)
+    private fun looksLikeFilterList(data: String): Boolean {
+        val text = data.trimStart('\uFEFF', ' ', '\t', '\r', '\n')
+        if (text.startsWith("<")) return false
+        val head = text.take(8192)
+        return listHeaderRegexp.containsMatchIn(head) || metadataRegexp.containsMatchIn(head)
+    }
 
     private val titleRegexp = Regex(
         "^\\s*!\\s*title[\\s\\-:]+([\\S ]+)$",
