@@ -1505,10 +1505,11 @@ bool AdBlockClient::parse(const char *input, bool preserveRules) {
   LinkedList<Filter> filterList;
 
   const char *lineStart = input;
-  const char *p = lineStart + 1;
+  // Start at the first character (not the second): for an empty input the second one lies beyond the buffer
+  const char *p = lineStart;
 
   while (true) {
-    if (!p && !lineStart && (isEndOfLine(*p) || *p == '\0') && p > lineStart) {
+    if (p && lineStart && (isEndOfLine(*p) || *p == '\0') && p > lineStart) {
       Filter f;
       parseFilter(lineStart, p, &f, bloomFilter, exceptionBloomFilter,
                   hostAnchoredHashSet,
