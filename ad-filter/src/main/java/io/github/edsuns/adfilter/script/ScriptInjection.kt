@@ -26,6 +26,18 @@ internal object ScriptInjection {
 
     private val bridgeNamePrefix = randomAlphanumericString()
 
+    private const val MAX_DOCUMENT_URL_LENGTH = 4096
+
+    /**
+     * The JS bridges are reachable by any script on the page, including third-party frames, so what they receive is
+     * untrusted. Only plausible http(s) document URLs are passed on to the native engine.
+     */
+    fun isValidDocumentUrl(url: String?): Boolean {
+        if (url == null || url.length > MAX_DOCUMENT_URL_LENGTH) return false
+        if (!url.startsWith("http://", ignoreCase = true) && !url.startsWith("https://", ignoreCase = true)) return false
+        return url.none { it.code < 0x20 || it.code == 0x7f }
+    }
+
     fun bridgeNameFor(owner: Any): String {
         val clazz = owner::class.java
         val index = bridgeRegister.indexOf(clazz)

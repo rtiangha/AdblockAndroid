@@ -66,7 +66,7 @@ internal class ElementHiding constructor(private val detector: Detector) {
             val scriptBuilder = StringBuilder(elemhideBlockedJs)
                 .append("\n\n")
                 .append("elemhideForSelector(\"")
-                .append(resourceUrl)// 1st argument
+                .append(escapeJavaScriptString(resourceUrl ?: ""))// 1st argument
 
             scriptBuilder.append("\", \"")
             scriptBuilder.append(escapeJavaScriptString(selectorBuilder.toString()))// 2nd argument
@@ -92,6 +92,7 @@ internal class ElementHiding constructor(private val detector: Detector) {
 
     @JavascriptInterface
     fun getStyleSheet(documentUrl: String): String {
+        if (!ScriptInjection.isValidDocumentUrl(documentUrl)) return ""
         val result = StringBuilder()
         val selectors = detector.getElementHidingSelectors(documentUrl)
         val customSelectors = detector.getCustomElementHidingSelectors(documentUrl)
@@ -111,6 +112,7 @@ internal class ElementHiding constructor(private val detector: Detector) {
 
     @JavascriptInterface
     fun getExtendedCssStyleSheet(documentUrl: String): String {
+        if (!ScriptInjection.isValidDocumentUrl(documentUrl)) return ""
         val extendedCss = detector.getExtendedCssSelectors(documentUrl)
         if (extendedCss.isNotEmpty()) {
             // join to String with ", "

@@ -26,6 +26,11 @@ internal class DownloadWorker(context: Context, params: WorkerParameters) : Work
     override fun doWork(): Result {
         val id = inputData.getString(KEY_FILTER_ID) ?: return Result.failure()
         val url = inputData.getString(KEY_DOWNLOAD_URL) ?: return Result.failure()
+        if (!url.startsWith("https://", ignoreCase = true)) {
+            // Rules (including scriptlets) end up in every page: never accept them over an unencrypted connection
+            Timber.w("Refusing to download a filter over an insecure connection: $url $id")
+            return Result.failure(inputData)
+        }
         Timber.v("Start download: $url $id")
         try {
             val request = HttpRequest(url).timeout(TIMEOUT_MS).get()

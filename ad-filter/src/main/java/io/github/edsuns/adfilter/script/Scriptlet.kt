@@ -35,6 +35,7 @@ internal class Scriptlet constructor(private val detector: Detector) {
 
     @JavascriptInterface
     fun getScriptlets(documentUrl: String): String {
+        if (!ScriptInjection.isValidDocumentUrl(documentUrl)) return "[]"
         val list = detector.getScriptlets(documentUrl)
         val json = list.toScriptletsJSON()
         Timber.v("offer scriptlets: $json")
