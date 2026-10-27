@@ -14,11 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - name: Install Android NDK r29
+      - name: Install Android NDK r30
         uses: nttld/setup-ndk@v1
         id: setup-ndk
         with:
-          ndk-version: r29
+          ndk-version: r30
           link-to-sdk: true
 
       - name: Set up JDK 25 
