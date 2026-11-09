@@ -66,7 +66,7 @@ dependencies {
         implementation 'com.google.protobuf:protobuf-kotlin:4.36.2'
         implementation 'io.netty:netty-common:4.2.19.Final'
         implementation 'io.netty:netty-codec-http:4.2.20.Final'
-        implementation 'io.netty:netty-codec-http2:4.2.19.Final'
+        implementation 'io.netty:netty-codec-http2:4.2.20.Final'
         implementation 'io.netty:netty-handler:4.2.20.Final'
         implementation 'org.jdom:jdom2:2.0.6.1'
         implementation 'org.jetbrains.kotlin:kotlin-stdlib:2.4.21'
